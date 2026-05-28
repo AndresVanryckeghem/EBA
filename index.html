@@ -102,22 +102,19 @@
   .player .note{margin-top:16px;font-size:.78rem;color:rgba(255,255,255,.3);line-height:1.5}
   .player .err{margin-top:14px;font-size:.8rem;color:#ff9b9b;display:none}
 
-  /* ---- Floating controls shown during Read ---- */
-  #fsw-readbar{
-    position:fixed;top:14px;right:14px;z-index:60;display:none;gap:8px;
-    font-family:'Inter',system-ui,sans-serif;
-  }
-  #fsw-readbar.show{display:flex;animation:fsw-rise .4s ease both}
-  #fsw-readbar button{
-    display:flex;align-items:center;gap:6px;cursor:pointer;
-    font-family:'Inter',sans-serif;font-size:12px;font-weight:600;
-    padding:8px 14px;border-radius:22px;transition:all .18s;
+  /* ---- Floating Listen button shown during Read ---- */
+  #fsw-listen-btm{
+    position:fixed;bottom:18px;right:24px;z-index:60;display:none;align-items:center;gap:6px;cursor:pointer;
+    font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
+    padding:11px 20px;border-radius:30px;transition:all .18s;
     background:rgba(13,27,30,.82);backdrop-filter:blur(8px);
-    border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.72);
+    border:1px solid rgba(201,241,53,.45);color:#c9f135;
   }
-  #fsw-readbar button:hover{color:#0d1b1e;background:#fff;border-color:#fff}
-  #fsw-readbar .rb-listen{border-color:rgba(201,241,53,.45);color:#c9f135}
-  #fsw-readbar .rb-listen:hover{color:#0d1b1e;background:#c9f135;border-color:#c9f135}
+  #fsw-listen-btm.show{display:inline-flex;animation:fsw-rise .4s ease both}
+  #fsw-listen-btm:hover{color:#0d1b1e;background:#c9f135;border-color:#c9f135}
+  @media(max-width:600px){
+    #fsw-listen-btm{bottom:14px;right:14px;padding:9px 16px;font-size:12px}
+  }
 </style>
 </head>
 <body>
@@ -168,11 +165,8 @@
   </div>
 </div>
 
-<!-- ============ Floating controls shown while reading (NEW) ============ -->
-<div id="fsw-readbar">
-  <button class="rb-home" id="read-home">⌂ Home</button>
-  <button class="rb-listen" id="read-listen">🎧 Listen</button>
-</div>
+<!-- ============ Floating control shown while reading (NEW) ============ -->
+<button id="fsw-listen-btm" type="button">🎧 Listen</button>
 
 <!-- ============ EXISTING: your interactive read app mounts here ============ -->
 <div id="fsw-mount"></div>
@@ -185,25 +179,25 @@
   var mount   = document.getElementById('fsw-mount');
   var player  = document.getElementById('story-audio');
   var errEl   = document.getElementById('audio-err');
-  var readbar = document.getElementById('fsw-readbar');
+  var listenBtm = document.getElementById('fsw-listen-btm');
 
   function showChoice(){
     choice.classList.remove('hidden');
     audio.classList.remove('show');
-    readbar.classList.remove('show');
+    listenBtm.classList.remove('show');
     mount.style.display = 'none';
     if(player){ player.pause(); }
   }
   function showAudio(){
     choice.classList.add('hidden');
     audio.classList.add('show');
-    readbar.classList.remove('show');
+    listenBtm.classList.remove('show');
     mount.style.display = 'none';
   }
   function showRead(){
     choice.classList.add('hidden');
     audio.classList.remove('show');
-    readbar.classList.add('show');
+    listenBtm.classList.add('show');
     mount.style.display = 'block';
     if(player){ player.pause(); }
     if(window.__fswStart){ window.__fswStart(); }
@@ -212,8 +206,7 @@
   document.getElementById('pick-audio').addEventListener('click', showAudio);
   document.getElementById('pick-read').addEventListener('click', showRead);
   document.getElementById('audio-back').addEventListener('click', showChoice);
-  document.getElementById('read-home').addEventListener('click', showChoice);
-  document.getElementById('read-listen').addEventListener('click', showAudio);
+  listenBtm.addEventListener('click', showAudio);
   if(player){
     player.addEventListener('error', function(){ errEl.style.display='block'; });
   }
