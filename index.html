@@ -118,7 +118,11 @@
   #fsw-listen-btm.show{display:inline-flex;animation:fsw-rise .4s ease both}
   #fsw-listen-btm:hover{color:#0d1b1e;background:#c9f135;border-color:#c9f135}
   @media(max-width:600px){
-    #fsw-listen-btm{bottom:14px;right:14px;padding:9px 16px;font-size:12px}
+    #fsw-listen-btm{
+      position:static;display:none;margin:4px auto 22px;
+      bottom:auto;right:auto;padding:11px 22px;font-size:13px;
+    }
+    #fsw-listen-btm.show{display:flex;width:max-content;}
   }
 </style>
 </head>
@@ -170,11 +174,11 @@
   </div>
 </div>
 
-<!-- ============ Floating control shown while reading (NEW) ============ -->
-<button id="fsw-listen-btm" type="button">🎧 Listen</button>
-
 <!-- ============ EXISTING: your interactive read app mounts here ============ -->
 <div id="fsw-mount"></div>
+
+<!-- ============ Floating control shown while reading (NEW) ============ -->
+<button id="fsw-listen-btm" type="button">🎧 Listen</button>
 
 <script>
 /* ---------- choice / audio / read screen wiring ---------- */
