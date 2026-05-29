@@ -16,11 +16,16 @@
   // === Per-story config — change this one line per story ===
   window.STORY_NAME = "whoop";
 
-  // Small helper: every event we send is tagged with story_name automatically
+  // Small helper: every event we send is tagged with story_name automatically,
+  // AND posted to the parent window so an embedding site (e.g. Webflow) can forward
+  // it to its own GA4 even if the iframe's analytics is blocked by the browser.
   window.track = function(eventName, params){
+    var payload = Object.assign({ story_name: window.STORY_NAME }, params || {});
+    try { gtag('event', eventName, payload); } catch(e) {}
     try {
-      var payload = Object.assign({ story_name: window.STORY_NAME }, params || {});
-      gtag('event', eventName, payload);
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ source: 'fsw-story', name: eventName, params: payload }, '*');
+      }
     } catch(e) {}
   };
 </script>
